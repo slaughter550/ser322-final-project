@@ -9,7 +9,7 @@ This is a simple API which maps tables and id values into HTTP calls for access 
 2. cd ser322-final-project
 3. npm install
 4. node server.js
-5. open http://localhost:8080
+5. open [http://127.0.0.1:8080] (http://127.0.0.1:8080)
 
 ### Usage
 
