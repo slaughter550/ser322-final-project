@@ -1,6 +1,6 @@
 # SER 322 Final Project
 
-### Usage
+### Introduction
 
 This is a simple API which maps tables and id values into HTTP calls for access through a JSON api. To use please follow the instructions listed below.
 
