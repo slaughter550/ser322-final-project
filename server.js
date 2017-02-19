@@ -35,7 +35,7 @@ app.get('/api/:table/:id?', (request, response) => {
     var singular = true;
 
     var id = request.params.id;
-    id ? (query += ` WHERE id = ${id}`) : (singular = false);
+    id ? (query += ` WHERE id = "${id}"`) : (singular = false);
 
     jsonQueryResponse(response, query, singular);
 })
