@@ -30,6 +30,22 @@ app.listen(port, (err) => {
 });
 
 app.use(express.static('public'));
+app.use(function (req, res, next) {
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  next();
+});
+
+app.get('/api/cards/:attribute/:value', (request, response) => {
+  let query = `SELECT C.*, S.name as setName FROM cards as C
+               JOIN sets S on C.set = S.code
+               WHERE C.${request.params.attribute} like "%${request.params.value}%"`;
+
+  jsonQueryResponse(response, query, null);
+});
 
 app.get('/api/:table/:attribute/:value', (request, response) => {
   let query = `SELECT * FROM ${request.params.table}

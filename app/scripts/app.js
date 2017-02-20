@@ -1,36 +1,21 @@
 'use strict';
 
-/**
- * @ngdoc overview
- * @name ser322finalApp
- * @description
- * # ser322finalApp
- *
- * Main module of the application.
- */
 angular
   .module('ser322finalApp', [
     'ngAnimate',
     'ngCookies',
     'ngMessages',
     'ngResource',
-    'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ui.router',
+    'ngMaterial'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
+  .config(function ($urlRouterProvider, $stateProvider) {
+    $urlRouterProvider.otherwise('/');
+
+    $stateProvider.state('cards', {
+      url: '/',
+      templateUrl: '/views/cards.html',
+      controller: 'CardsCtrl'
+    });
   });

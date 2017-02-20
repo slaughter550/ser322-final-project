@@ -3,4 +3,5 @@ dist
 .sass-cache
 bower_components
 node_modules
-/.idea
+.idea
+.idea/workspace.xml

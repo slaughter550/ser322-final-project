@@ -1,0 +1,23 @@
+<md-content id="search" class="md-inline-form">
+    <md-input-container id="cardSearch">
+        <input type="text" ng-model="card.name" placeholder="Search by card name...">
+    </md-input-container>
+    <md-button class="md-primary" ng-click="searchByName(card.name)">Search</md-button>
+</md-content>
+<md-content id="searchResults">
+    <md-card md-theme ng-repeat="card in cardResults" class="mtgCard">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{card.name}}</span>
+                <span class="md-subhead">Type: {{card.type}}</span>
+                <span class="md-subhead">Set: {{card.setName}}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="row" layout-align="space-between">
+            <div flex="20" class="md-media-lg card-media">
+                <img src="{{card.imageUrl}}">
+            </div>
+            <p flex>{{card.text}}</p>
+        </md-card-content>
+    </md-card>
+</md-content>
