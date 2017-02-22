@@ -1,7 +1,5 @@
-dist
 .tmp
-.sass-cache
 bower_components
 node_modules
 .idea
-.idea/workspace.xml
+
