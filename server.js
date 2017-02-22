@@ -8,7 +8,7 @@ let connection = mysql.createConnection({
   host: '52.39.43.206',
   user: 'test',
   password: 'test',
-  database: 'ser322',
+  database: 'ser322'
 });
 
 let jsonQueryResponse = (response, query, singular) => {

@@ -10,6 +10,11 @@ angular.module('ser322finalApp')
     $scope.searchByName = function(cardName) {
       $http.get('http://localhost:8080/api/cards/name/' + cardName).then(function(res) {
         $scope.cardResults = res.data;
+
+        //TODO: Modify query to provide card quantity of search.
+        $scope.cardResults.forEach((card) => {
+          if (!card.quantity) card['quantity'] = 0;
+        });
       });
     }
 

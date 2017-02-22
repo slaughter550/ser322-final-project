@@ -8,7 +8,16 @@
     <md-card md-theme ng-repeat="card in cardResults" class="mtgCard">
         <md-card-title>
             <md-card-title-text>
-                <span class="md-headline">{{card.name}}</span>
+                <div layout-align="space-between center" layout="row">
+                    <span class="md-headline">{{card.name}}</span>
+                    <div>
+                        <md-input-container>
+                            <label>Quantity</label>
+                            <input ng-model="card.quantity" type="number" step="1">
+                        </md-input-container>
+                        <span class="md-subhead"> In Deck</span>
+                    </div>
+                </div>
                 <span class="md-subhead">Type: {{card.type}}</span>
                 <span class="md-subhead">Set: {{card.setName}}</span>
             </md-card-title-text>
@@ -19,5 +28,9 @@
             </div>
             <p flex>{{card.text}}</p>
         </md-card-content>
+        <md-card-actions id="actionButtons" layout="row" layout-align="end center">
+            <md-button class="md-raised md-warn">Remove All</md-button>
+            <md-button class="md-raised md-primary">Add {{card.quantity}} Cards</md-button>
+        </md-card-actions>
     </md-card>
 </md-content>
