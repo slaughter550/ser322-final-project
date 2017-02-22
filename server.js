@@ -21,14 +21,6 @@ let jsonQueryResponse = (response, query, singular) => {
   });
 };
 
-app.listen(port, (err) => {
-  if (err) {
-    return console.log('failed to launch', err);
-  }
-
-  console.log(`server is listening on ${port}`);
-});
-
 app.use(express.static('public'));
 app.use(function (req, res, next) {
 
@@ -46,6 +38,9 @@ app.get('/api/cards/:attribute/:value', (request, response) => {
 
   jsonQueryResponse(response, query, null);
 });
+
+app.use(express.static('public'));
+
 
 app.get('/api/:table/:attribute/:value', (request, response) => {
   let query = `SELECT * FROM ${request.params.table}
@@ -65,6 +60,13 @@ app.get('/api/:table/:id?', (request, response) => {
 
 app.on('close', () => {
   connection.end();
+});
+
+app.listen(port, (err) => {
+  if (err) {
+    return console.log('failed to launch', err);
+  }
+  console.log(`server is listening on ${port}`);
 });
 
 app.use((err, request, response, next) => {
