@@ -12,10 +12,12 @@ angular.module('ser322finalApp')
         $scope.cardResults = res.data;
 
         //TODO: Modify query to provide card quantity of search.
-        $scope.cardResults.forEach((card) => {
-          if (!card.quantity) card['quantity'] = 0;
+        $scope.cardResults.forEach(function(card) {
+          if (!card.quantity) {
+            card.quantity = 0;
+          }
         });
       });
-    }
+    };
 
   });

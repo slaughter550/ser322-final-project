@@ -1,5 +1,6 @@
 'use strict';
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 8080;
 
@@ -21,7 +22,20 @@ let jsonQueryResponse = (response, query, singular) => {
   });
 };
 
+let jsonSaveQuery = (response, query) => {
+  connection.query(query, (err) => {
+    if (err) {
+      throw err;
+    }
+    response.status(200).send('Deck saved.');
+  })
+};
+
 app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(function (req, res, next) {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -58,6 +72,22 @@ app.get('/api/:table/:id?', (request, response) => {
   jsonQueryResponse(response, query, singular);
 });
 
+app.post('/api/decks/save', (request, response) => {
+  let name = request.body.name;
+  let format = request.body.format;
+  let archetype = request.body.archetype;
+  let colorCombo = request.body.colorCombo.name;
+
+  let badRequest = !(name && format && archetype && colorCombo);
+
+  if (badRequest) {
+    response.status(400).send("Bad Request, missing data");
+  } else {
+    let query = `INSERT INTO ser322.decks (name, format, archetype, comboName)
+                  VALUES ('${name}', '${format}', '${archetype}', '${colorCombo}')`;
+    jsonSaveQuery(response, query);
+  }
+});
 app.on('close', () => {
   connection.end();
 });

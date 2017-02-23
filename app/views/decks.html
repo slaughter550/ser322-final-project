@@ -1,0 +1,41 @@
+<div layout="column" style="width: 20%;">
+    <md-input-container>
+        <input type="text" ng-model="deck.name" placeholder="Name your deck...">
+    </md-input-container>
+    <md-input-container>
+        <label>Archetype</label>
+        <md-select ng-model="deck.archetype">
+            <md-optgroup ng-repeat="(category, names) in archetypes" label="{{category}}">
+                <md-option ng-repeat="name in names" ng-value="name">
+                    {{name}}
+                </md-option>
+            </md-optgroup>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+        <label>Format</label>
+        <md-select ng-model="deck.format">
+            <md-option ng-repeat="format in formats" ng-value="format">
+                {{format}}
+            </md-option>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+        <md-autocomplete md-selected-item="deck.colorCombo"
+                         md-items="combo in colorCombos | filter : searchText"
+                         md-item-text="combo.name"
+                         md-search-text="searchText"
+                         md-floating-label="Color Combo"
+                         md-min-length="0"
+                         id="colorCombo">
+            <md-item-template>
+                <img ng-repeat="color in combo.colors" ng-src="{{color}}">
+                <span>{{combo.name}}</span>
+            </md-item-template>
+        </md-autocomplete>
+    </md-input-container>
+    <div layout="row" layout-align="end center">
+        <md-button class="md-warn md-raised" ng-click="clearForm()">Clear Form</md-button>
+        <md-button class="md-primary md-raised" ng-click="saveDeck(deck)">Save Deck</md-button>
+    </div>
+</div>

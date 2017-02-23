@@ -17,5 +17,11 @@ angular
       url: '/',
       templateUrl: '/views/cards.html',
       controller: 'CardsCtrl'
+    })
+
+    .state('decks', {
+      url: '/decks',
+      templateUrl: '/views/decks.html',
+      controller: 'DecksCtrl'
     });
   });

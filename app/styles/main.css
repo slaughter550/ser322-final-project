@@ -1,3 +1,7 @@
 #cardSearch {
     width: 80vw;
 }
+
+input {
+    color: black !important;
+}

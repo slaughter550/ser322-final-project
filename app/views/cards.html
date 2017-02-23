@@ -13,20 +13,18 @@
                     <div>
                         <md-input-container>
                             <label>Quantity</label>
-                            <input ng-model="card.quantity" type="number" step="1">
+                            <input ng-model="card.quantity" type="number" step="1" min="0">
                         </md-input-container>
                         <span class="md-subhead"> In Deck</span>
                     </div>
                 </div>
-                <span class="md-subhead">Type: {{card.type}}</span>
-                <span class="md-subhead">Set: {{card.setName}}</span>
+                <span class="md-subhead"><em>Type:</em> {{card.type}}</span>
+                <span class="md-subhead"><em>Set:</em> {{card.setName}}</span>
             </md-card-title-text>
         </md-card-title>
         <md-card-content layout="row" layout-align="space-between">
-            <div flex="20" class="md-media-lg card-media">
-                <img src="{{card.imageUrl}}">
-            </div>
-            <p flex>{{card.text}}</p>
+            <img src="{{card.imageUrl}}" >
+            <p flex style="padding-left: 20px;">{{card.text}}</p>
         </md-card-content>
         <md-card-actions id="actionButtons" layout="row" layout-align="end center">
             <md-button class="md-raised md-warn">Remove All</md-button>
