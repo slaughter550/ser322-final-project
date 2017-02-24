@@ -45,11 +45,17 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get('/api/cards/:attribute/:value', (request, response) => {
-  let query = `SELECT C.*, S.name as setName FROM cards as C
-               JOIN sets S on C.set = S.code
-               WHERE C.${request.params.attribute} like "%${request.params.value}%"`;
-
+app.get('/api/cards', (request, response) => {
+  let attribute = request.query.attribute;
+  let value = request.query.value;
+  let deckID = request.query.deckid;
+  let query = `SELECT * 
+                FROM ser322.cardstodecks CTD
+                RIGHT JOIN
+                (SELECT C.*, S.name as setName
+                FROM cards as C
+                JOIN sets S on C.set = S.code WHERE C.name like "%${value}%") Cards on CTD.cardID = Cards.ID
+                WHERE deckID is null or deckID = ${deckID};`;
   jsonQueryResponse(response, query, null);
 });
 
@@ -88,6 +94,43 @@ app.post('/api/decks/save', (request, response) => {
     jsonSaveQuery(response, query);
   }
 });
+
+app.post('/api/decks/remove/:id', (req, res) => {
+  let deckID = req.params.id;
+  let removeDeckQuery = `DELETE FROM ser322.decks WHERE ID = ${deckID};`;
+  let removeDeckCardsQuery = `DELETE FROM ser322.cardstodecks WHERE deckID = ${deckID};`;
+  connection.query(removeDeckQuery, function (err) {
+    if (err) throw err;
+  });
+  connection.query(removeDeckCardsQuery, function (err) {
+    if (err) throw err;
+  });
+
+  res.status(200).send('Deck ' + deckID + ' removed.');
+});
+
+app.post('/api/decks/addcards', (req, res) => {
+  let cardID = req.body.cardID;
+  let deckID = req.body.deckID;
+  let quantity = req.body.quantity;
+
+  let addCardQuery = `INSERT INTO ser322.cardstodecks (cardID, deckID, quantity) 
+                      VALUES ('${cardID}', ${deckID}, ${quantity})
+                      ON DUPLICATE KEY UPDATE quantity=${quantity};`;
+
+  console.log(addCardQuery);
+  jsonSaveQuery(res, addCardQuery, null);
+});
+
+app.post('/api/decks/removecards', (req, res) => {
+  let cardID = req.body.cardID;
+  let deckID = req.body.deckID;
+
+  let removeCardQuery = `DELETE FROM ser322.cardstodecks
+                         WHERE cardID = '${cardID}' and deckID = '${deckID}';`;
+  jsonSaveQuery(res, removeCardQuery, null);
+});
+
 app.on('close', () => {
   connection.end();
 });

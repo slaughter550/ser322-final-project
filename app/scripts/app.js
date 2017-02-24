@@ -14,13 +14,13 @@ angular
     $urlRouterProvider.otherwise('/');
 
     $stateProvider.state('cards', {
-      url: '/',
+      url: '/cards',
       templateUrl: '/views/cards.html',
       controller: 'CardsCtrl'
     })
 
     .state('decks', {
-      url: '/decks',
+      url: '/',
       templateUrl: '/views/decks.html',
       controller: 'DecksCtrl'
     });
