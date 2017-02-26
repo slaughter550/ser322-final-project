@@ -1,0 +1,38 @@
+<div layout="row" layout-align="space-between center" style="margin-right: 100px;">
+    <h1>Editing {{deck.name}}</h1>
+    <md-button ui-sref="decks" class="md-primary md-raised">Decks</md-button>
+</div>
+<md-content id="search" class="md-inline-form">
+    <md-input-container id="cardSearch">
+        <input type="text" ng-model="card.name" placeholder="Search by card name...">
+    </md-input-container>
+    <md-button class="md-primary" ng-click="searchByName(card.name)">Search</md-button>
+</md-content>
+<md-content id="searchResults">
+    <md-card md-theme ng-repeat="card in cardResults" class="mtgCard">
+        <md-card-title>
+            <md-card-title-text>
+                <div layout-align="space-between center" layout="row">
+                    <span class="md-headline">{{card.name}}</span>
+                    <div>
+                        <md-input-container>
+                            <label>Quantity</label>
+                            <input ng-model="card.newQuantity" type="number" step="1" min="0">
+                        </md-input-container>
+                        <span class="md-subhead"> In Deck</span>
+                    </div>
+                </div>
+                <span class="md-subhead"><em>Type:</em> {{card.type}}</span>
+                <span class="md-subhead"><em>Set:</em> {{card.setName}}</span>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content layout="row" layout-align="space-between">
+            <img src="{{card.imageUrl}}">
+            <p flex style="padding-left: 20px;">{{card.text}}</p>
+        </md-card-content>
+        <md-card-actions id="actionButtons" layout="row" layout-align="end center">
+            <md-button ng-click="removeCards(card)" class="md-raised md-warn">Remove All</md-button>
+            <md-button ng-click="addCards(card, card.newQuantity)" class="md-raised md-primary">Add {{card.newQuantity}} Cards</md-button>
+        </md-card-actions>
+    </md-card>
+</md-content>
