@@ -54,8 +54,10 @@ angular.module('ser322finalApp')
       console.log(config);
       $http(config).then(function () {
         $scope.cardResults.forEach(function (card) {
-          if (card.id === config.data.cardID && card.id === selected.getDeck().id) {
+          if (card.id === config.data.cardID && card.deckID === selected.getDeck().id) {
             card.quantity = quantity;
+          } else {
+            card.quantity = 0;
           }
         });
       });

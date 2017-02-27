@@ -96,6 +96,19 @@ app.get('/api/:table/:attribute/:value', (request, response) => {
 });
 
 /**
+ * End point to retrieve full table of data or a specific id's data.
+ */
+app.get('/api/:table/:id?', (request, response) => {
+  let query = `SELECT * FROM ${request.params.table}`;
+  let singular = true;
+
+  let id = request.params.id;
+  id ? (query += ` WHERE id = "${id}"`) : (singular = false);
+
+  jsonQueryResponse(response, query, singular);
+});
+
+/**
  * End point to allow for saving a deck. Once saved, the deck is available for editing to add/remove cards.
  */
 app.post('/api/decks/save', (request, response) => {
