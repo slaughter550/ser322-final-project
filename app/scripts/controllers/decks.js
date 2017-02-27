@@ -109,7 +109,7 @@ angular.module('ser322finalApp')
 
     $scope.deleteDeck = function(deckID) {
       $http.post('http://localhost:8080/api/decks/remove/' + deckID).then(function(res) {
-        if (res.status == 200) {
+        if (res.status === 200) {
           $scope.refreshDecks();
         } else {
           console.log('Error deleting deck ' + deckID);
@@ -119,5 +119,5 @@ angular.module('ser322finalApp')
 
     $scope.editDeck = function(deck) {
       selected.setDeck(deck);
-    }
+    };
   });
