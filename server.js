@@ -80,6 +80,7 @@ app.get('/api/cards', (request, response) => {
               WHERE  CARDS.name LIKE '%${value}%'
                      AND CTD.deckid = ${deckID}; `;
   logQuery(query, request);
+
   jsonQueryResponse(response, query, null);
 });
 
