@@ -9,7 +9,7 @@
     <md-button class="md-primary" ng-click="searchByName(card.name)">Search</md-button>
 </md-content>
 <md-content id="searchResults">
-    <md-card md-theme ng-repeat="card in cardResults | orderBy: ['-newQuantity', 'name']" class="mtgCard">
+    <md-card md-theme ng-repeat="card in cardResults | orderBy: ['-quantity', 'name']" class="mtgCard">
         <md-card-title>
             <md-card-title-text>
                 <div layout-align="space-between center" layout="row">
