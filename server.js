@@ -56,7 +56,6 @@ app.get('/api/cards', (request, response) => {
   let deckID = request.query.deckid;
   let query = `SELECT * FROM cards LEFT JOIN cardstodecks ON cardid = id
                 WHERE name LIKE '%${value}%' GROUP BY id`;
-
   jsonQueryResponse(response, query, null);
 });
 
