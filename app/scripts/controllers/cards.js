@@ -9,7 +9,6 @@ angular.module('ser322finalApp')
     $scope.deck = selected.getDeck();
 
     $scope.searchByName = function (cardName) {
-
       let url = 'http://localhost:8080/api/cards';
       let urlConfig = {
         url: url,
@@ -32,6 +31,7 @@ angular.module('ser322finalApp')
           if (card.deckID === selected.getDeck().id) {
             card.newQuantity = card.quantity;
           } else {
+            card.quantity = 0;
             card.newQuantity = 0;
           }
         });
@@ -52,12 +52,10 @@ angular.module('ser322finalApp')
           quantity: quantity
         }
       };
-
-      console.log(card);
-      console.log(config);
       $http(config).then(function () {
         $scope.cardResults.forEach(function (card) {
-          if (card.id === config.data.cardID && card.deckID === selected.getDeck().id) {
+          if (card.id === config.data.cardID && card.deckID === config.data.deckID) {
+
             card.quantity = quantity;
           } else {
             card.quantity = 0;
@@ -85,4 +83,5 @@ angular.module('ser322finalApp')
         });
       });
     };
+
   });
