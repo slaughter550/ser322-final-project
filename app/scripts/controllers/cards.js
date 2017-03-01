@@ -42,6 +42,7 @@ angular.module('ser322finalApp')
       if (!quantity) {
         return;
       }
+
       let config = {
         url: 'http://localhost:8080/api/decks/addcards',
         method: 'post',
@@ -54,6 +55,7 @@ angular.module('ser322finalApp')
       $http(config).then(function () {
         $scope.cardResults.forEach(function (card) {
           if (card.id === config.data.cardID && card.deckID === config.data.deckID) {
+
             card.quantity = quantity;
           } else {
             card.quantity = 0;
@@ -71,6 +73,7 @@ angular.module('ser322finalApp')
           cardID: card.id
         }
       };
+
       $http(config).then(function () {
         $scope.cardResults.forEach(function (card) {
           if (card.id === config.data.cardID && card.deckID === selected.getDeck().id) {
