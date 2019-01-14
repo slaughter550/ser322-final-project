@@ -13,16 +13,9 @@ let connection = mysql.createConnection({
   database: 'ser322'
 });
 
-//Logging function to see what query is being run.
-let logQuery = (query, req) => {
-  console.log('--------------------------------------------');
-  console.log(new Date());
-  console.log(query);
-};
-
 //Helper function to execute a generic query.
 let jsonQueryResponse = (response, query, singular) => {
-  connection.query(query, function (error, results, fields) {
+  connection.query(query, function(error, results, fields) {
     if (error) throw error;
 
     let result = singular ? results[0] : results;
@@ -34,22 +27,19 @@ let jsonQueryResponse = (response, query, singular) => {
 //A helper function for saving decks. No results are sent since it's an insert query.
 let jsonSaveQuery = (response, query) => {
   connection.query(query, (err) => {
-    if (err) {
-      throw err;
-    }
-    response.status(200).send('Deck saved.');
+    if (err) throw err;
+
+    response.send('Deck saved.');
   })
 };
 
-app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
 //Allow any origin to make GET and POST requests.
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
@@ -64,22 +54,8 @@ app.use(function (req, res, next) {
 app.get('/api/cards', (request, response) => {
   let value = request.query.value;
   let deckID = request.query.deckid;
-  let query = `SELECT * 
-              FROM   ser322.cards CARDS 
-                     LEFT JOIN ser322.cardstodecks CTD 
-                            ON CTD.cardid = CARDS.id 
-              WHERE  CARDS.name  LIKE '%${value}%' 
-                     AND CARDS.id NOT IN (SELECT cardid 
-                                          FROM   ser322.cardstodecks 
-                                          WHERE  deckid = ${deckID}) 
-              UNION 
-              SELECT * 
-              FROM   ser322.cards CARDS 
-                     JOIN ser322.cardstodecks CTD 
-                       ON CTD.cardid = CARDS.id 
-              WHERE  CARDS.name LIKE '%${value}%'
-                     AND CTD.deckid = ${deckID}; `;
-  logQuery(query, request);
+  let query = `SELECT * FROM cards LEFT JOIN cardstodecks ON cardid = id
+                WHERE name LIKE '%${value}%' GROUP BY id`;
   jsonQueryResponse(response, query, null);
 });
 
@@ -91,7 +67,6 @@ app.get('/api/cards', (request, response) => {
 app.get('/api/:table/:attribute/:value', (request, response) => {
   let query = `SELECT * FROM ${request.params.table}
                 WHERE ${request.params.attribute} like "%${request.params.value}%"`;
-  logQuery(query, request);
   jsonQueryResponse(response, query, null);
 });
 
@@ -100,12 +75,11 @@ app.get('/api/:table/:attribute/:value', (request, response) => {
  */
 app.get('/api/:table/:id?', (request, response) => {
   let query = `SELECT * FROM ${request.params.table}`;
-  let singular = true;
 
   let id = request.params.id;
-  id ? (query += ` WHERE id = "${id}"`) : (singular = false);
+  if (id) query += ` WHERE id = "${id}"`;
 
-  jsonQueryResponse(response, query, singular);
+  jsonQueryResponse(response, query, !!id);
 });
 
 /**
@@ -124,7 +98,6 @@ app.post('/api/decks/save', (request, response) => {
   } else {
     let query = `INSERT INTO ser322.decks (name, format, archetype, comboName)
                   VALUES ('${name}', '${format}', '${archetype}', '${colorCombo}')`;
-    logQuery(query, request);
     jsonSaveQuery(response, query);
   }
 });
@@ -137,13 +110,10 @@ app.post('/api/decks/remove/:id', (req, res) => {
   let removeDeckQuery = `DELETE FROM ser322.decks WHERE ID = ${deckID};`;
   let removeDeckCardsQuery = `DELETE FROM ser322.cardstodecks WHERE deckID = ${deckID};`;
 
-  logQuery(removeDeckQuery, req);
-  logQuery(removeDeckCardsQuery, req);
-
-  connection.query(removeDeckQuery, function (err) {
+  connection.query(removeDeckQuery, function(err) {
     if (err) throw err;
   });
-  connection.query(removeDeckCardsQuery, function (err) {
+  connection.query(removeDeckCardsQuery, function(err) {
     if (err) throw err;
   });
 
@@ -158,10 +128,9 @@ app.post('/api/decks/addcards', (req, res) => {
   let deckID = req.body.deckID;
   let quantity = req.body.quantity;
 
-  let addCardQuery = `INSERT INTO ser322.cardstodecks (cardID, deckID, quantity) 
+  let addCardQuery = `INSERT INTO ser322.cardstodecks (cardID, deckID, quantity)
                       VALUES ('${cardID}', ${deckID}, ${quantity})
                       ON DUPLICATE KEY UPDATE quantity=${quantity};`;
-  logQuery(addCardQuery, req);
   jsonSaveQuery(res, addCardQuery, null);
 });
 
@@ -174,7 +143,6 @@ app.post('/api/decks/removecards', (req, res) => {
 
   let removeCardQuery = `DELETE FROM ser322.cardstodecks
                          WHERE cardID = '${cardID}' and deckID = '${deckID}';`;
-  logQuery(removeCardQuery, req);
   jsonSaveQuery(res, removeCardQuery, null);
 });
 

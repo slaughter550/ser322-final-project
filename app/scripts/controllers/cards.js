@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('ser322finalApp')
-  .controller('CardsCtrl', function ($scope, $http, selected) {
+  .controller('CardsCtrl', function($scope, $http, selected) {
     $scope.card = {
       name: '',
     };
 
     $scope.deck = selected.getDeck();
+    $scope.searchByName = function(cardName) {
 
-    $scope.searchByName = function (cardName) {
       let url = 'http://localhost:8080/api/cards';
       let urlConfig = {
         url: url,
@@ -19,15 +19,13 @@ angular.module('ser322finalApp')
           deckid: selected.getDeck().id
         }
       };
-      console.log(selected.getDeck());
       if (cardName) {
         urlConfig.params.value = cardName;
       }
-      $http(urlConfig).then(function (res) {
+      $http(urlConfig).then(function(res) {
         $scope.cardResults = res.data;
 
-        $scope.cardResults.forEach(function (card) {
-          console.log(card);
+        $scope.cardResults.forEach(function(card) {
           if (card.deckID === selected.getDeck().id) {
             card.newQuantity = card.quantity;
           } else {
@@ -38,7 +36,7 @@ angular.module('ser322finalApp')
       });
     };
 
-    $scope.addCards = function (card, quantity) {
+    $scope.addCards = function(card, quantity) {
       if (!quantity) {
         return;
       }
@@ -55,7 +53,6 @@ angular.module('ser322finalApp')
       $http(config).then(function () {
         $scope.cardResults.forEach(function (card) {
           if (card.id === config.data.cardID && card.deckID === config.data.deckID) {
-
             card.quantity = quantity;
           } else {
             card.quantity = 0;
@@ -64,7 +61,7 @@ angular.module('ser322finalApp')
       });
     };
 
-    $scope.removeCards = function (card) {
+    $scope.removeCards = function(card) {
       let config = {
         url: 'http://localhost:8080/api/decks/removecards',
         method: 'post',
@@ -74,8 +71,8 @@ angular.module('ser322finalApp')
         }
       };
 
-      $http(config).then(function () {
-        $scope.cardResults.forEach(function (card) {
+      $http(config).then(function() {
+        $scope.cardResults.forEach(function(card) {
           if (card.id === config.data.cardID && card.deckID === selected.getDeck().id) {
             card.newQuantity = 0;
             card.quantity = 0;

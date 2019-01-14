@@ -1,6 +1,5 @@
 'use strict';
 
-angular.module('ser322finalApp')
-  .controller('SingledeckCtrl', function () {
+angular.module('ser322finalApp').controller('SingledeckCtrl', function() {
 
-  });
+});
